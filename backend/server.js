@@ -11,9 +11,13 @@ app.use(express.json());
 const port = process.env.PORT;
 
 
-app.get('/',(req,res)=>{
-    res.status(200).json({Message: "Welcome"});
-})
+
+
+
+
+
+
+
 
 
 connectDB()
@@ -26,4 +30,3 @@ connectDB()
     console.log("Could not Connect to DB");
     console.log("Error :",err.message);
 });
-
