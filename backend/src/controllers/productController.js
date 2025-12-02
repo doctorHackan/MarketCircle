@@ -1,9 +1,17 @@
 const Product = require("../models/Product");
+const validateProduct = require("../utils/productValidator");
 
 
 const addProduct = async (req,res)=>{
     try{
         const product = req.body;
+
+        const { error } = validateProduct(product);
+
+        if(error){
+            return res.status(400).json({Message : error.details[0].message});
+        }
+
         await Product.create(product);
         res.status(201).json({Message: "Product Added"});
     }
