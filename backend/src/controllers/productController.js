@@ -22,8 +22,23 @@ const addProduct = async (req,res)=>{
 
 const getProducts = async (req,res)=>{
     try{
-        const products = await Product.find({});
-        res.status(200).json(products);
+        const pageNumber = req.query.page || 1;
+        const pageSize = 3;
+        const product = req.query.name?
+        {
+            name:{
+                $regex:req.query.name,
+                $options:'i'
+            }
+        } : {};
+
+        const total = await Product.countDocuments({...product});
+        const totalPages = Math.ceil(total/pageSize);
+        const foundProducts = await Product.find({...product})
+        .skip((pageNumber-1)*pageSize)
+        .limit(pageSize);
+
+        res.status(200).json({totalPages,foundProducts});
     }
     catch(err){
         res.status(500).json({Message : err.message});
